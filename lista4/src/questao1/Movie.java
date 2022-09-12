@@ -1,10 +1,13 @@
-package lista4.questao1;
+package questao1;
 
 public class Movie {
   private int id;
   private String title;
   private String director;
   private String sinopse;
+
+  public Movie() {
+  }
 
   public Movie(int id, String title, String director, String sinopse) {
     this.id = id;

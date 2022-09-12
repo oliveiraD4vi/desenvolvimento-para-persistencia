@@ -1,0 +1,22 @@
+<catalog>
+  <movies>
+    <movie>
+      <id>1</id>
+      <title>Winnie The Pooh: Blood and Honey</title>
+      <director>Rhys Waterfield</director>
+      <sinopse>Uma releitura de horror do livro de 1926 de A. A. Milne, Winnie-the-Pooh</sinopse>
+    </movie>
+    <movie>
+      <id>2</id>
+      <title>The Dark Night</title>
+      <director>Christopher Nolan</director>
+      <sinopse>Filme britânico-estadunidense de super-herói.</sinopse>
+    </movie>
+    <movie>
+      <id>3</id>
+      <title>It</title>
+      <director>Andy Muschietti</director>
+      <sinopse>Um grupo de crianças se une para investigar o misterioso desaparecimento de vários jovens em sua cidade.</sinopse>
+    </movie>
+  </movies>
+</catalog>
