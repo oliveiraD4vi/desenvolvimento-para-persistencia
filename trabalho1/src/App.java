@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import Compressing.Compressing;
+import Hashing.Hashing;
 import Model.LightNovel;
 import Serialization.Serialization;
 
@@ -25,6 +26,7 @@ public class App {
         System.out.println("5. Salvar arquivo em CSV");
       }
       System.out.println("6. Comprimir arquivo em Zip");
+      System.out.println("7. Verificar hashcode");
 
       System.out.print("Escolha uma opção: ");
       input = Integer.parseInt(in.nextLine());
@@ -121,6 +123,15 @@ public class App {
 
           Compressing compressing = new Compressing();
           compressing.compressToZip(destinyFile + ".zip", fileToCompress);
+          break;
+
+        case 7:
+          System.out.println();
+          System.out.print("Inserir filepath do arquivo: ");
+          String fileToHash = in.nextLine();
+
+          Hashing hashing = new Hashing();
+          System.out.println("\nSHA1: " + hashing.getHashSHA1(fileToHash));
           break;
 
         case 0:
