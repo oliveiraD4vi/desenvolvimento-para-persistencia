@@ -68,32 +68,47 @@ public class App {
           break;
 
         case 3:
-          System.out.print("\nInserir pathname: ");
-          String pathname3 = in.nextLine();
+          if (serialObject.getNovelList().size() > 0) {
+            System.out.print("\nInserir pathname: ");
+            String pathname3 = in.nextLine();
 
-          if (serialObject.saveJson(serialObject.getNovelList(), pathname3)) {
+            if (serialObject.saveJson(serialObject.getNovelList(), pathname3)) {
+              System.out.println();
+              System.out.println("Arquivo salvo com sucesso!");
+            }
+          } else {
             System.out.println();
-            System.out.println("Arquivo salvo com sucesso!");
+            System.out.println("Não há elementos na lista!");
           }
           break;
           
         case 4:
-          System.out.print("\nInserir pathname: ");
-          String pathname4 = in.nextLine();
+          if (serialObject.getNovelList().size() > 0) {
+            System.out.print("\nInserir pathname: ");
+            String pathname4 = in.nextLine();
 
-          if (serialObject.saveXml(serialObject.getNovelList(), pathname4)) {
+            if (serialObject.saveXml(serialObject.getNovelList(), pathname4)) {
+              System.out.println();
+              System.out.println("Arquivo salvo com sucesso!");
+            }
+          } else {
             System.out.println();
-            System.out.println("Arquivo salvo com sucesso!");
+            System.out.println("Não há elementos na lista!");
           }
           break;
 
         case 5:
-          System.out.print("\nInserir pathname: ");
-          String pathname5 = in.nextLine();
+          if (serialObject.getNovelList().size() > 0) {
+            System.out.print("\nInserir pathname: ");
+            String pathname5 = in.nextLine();
 
-          if (serialObject.saveCsv(serialObject.getNovelList(), pathname5)) {
+            if (serialObject.saveCsv(serialObject.getNovelList(), pathname5)) {
+              System.out.println();
+              System.out.println("Arquivo salvo com sucesso!");
+            }
+          } else {
             System.out.println();
-            System.out.println("Arquivo salvo com sucesso!");
+            System.out.println("Não há elementos na lista!");
           }
           break;
         
