@@ -14,7 +14,7 @@ public class Deserialization {
   public Deserialization() {
   }
 
-  public static LightNovelList readJson(String pathname) throws StreamReadException, DatabindException, IOException {
+  public LightNovelList readJson(String pathname) throws StreamReadException, DatabindException, IOException {
     File file = new File(pathname + ".json");
     ObjectMapper jsonFile = new ObjectMapper();
     LightNovelList novels = jsonFile.readValue(file, LightNovelList.class);
@@ -22,7 +22,7 @@ public class Deserialization {
     return novels;
   }
 
-  public static LightNovelList readXml(String pathname) throws StreamReadException, DatabindException, IOException {
+  public LightNovelList readXml(String pathname) throws StreamReadException, DatabindException, IOException {
     File file = new File(pathname + ".xml");
     XmlMapper xmlMapper = new XmlMapper();
     LightNovelList novels = xmlMapper.readValue(file, LightNovelList.class);
@@ -30,7 +30,7 @@ public class Deserialization {
     return novels;
   }
 
-  // public static LightNovelList readCsv(String pathname) throws Exception {
+  // public LightNovelList readCsv(String pathname) throws Exception {
   //   try {
       
   //   }

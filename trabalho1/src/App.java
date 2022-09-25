@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+import Compressing.Compressing;
 import Model.LightNovel;
 import Serialization.Serialization;
 
@@ -23,6 +24,7 @@ public class App {
         System.out.println("4. Salvar arquivo em XML");
         System.out.println("5. Salvar arquivo em CSV");
       }
+      System.out.println("6. Comprimir arquivo em Zip");
 
       System.out.print("Escolha uma opção: ");
       input = Integer.parseInt(in.nextLine());
@@ -94,13 +96,24 @@ public class App {
             System.out.println("Arquivo salvo com sucesso!");
           }
           break;
+        
+        case 6:
+          System.out.println();
+          System.out.print("Inserir filepath do arquivo: ");
+          String fileToCompress = in.nextLine();
+          System.out.print("Inserir filepath do destino: ");
+          String destinyFile = in.nextLine();
+
+          Compressing compressing = new Compressing();
+          compressing.compressToZip(destinyFile + ".zip", fileToCompress);
+          break;
 
         case 0:
           break;
 
         default:
           System.out.println();
-          System.out.println("Opção inválida!");  
+          System.out.println("Opção inválida!");
           break;
       }
     }
