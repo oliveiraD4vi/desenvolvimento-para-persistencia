@@ -1,0 +1,26 @@
+<LightNovelList>
+  <novels>
+    <novels>
+      <id>1</id>
+      <capQtd>10</capQtd>
+      <title>Título 1</title>
+      <sinopse>Sinopse 1</sinopse>
+      <release>2020</release>
+      <editor>Editora</editor>
+      <author>Autor</author>
+      <illustrator>Ilustrador</illustrator>
+      <finalized>false</finalized>
+    </novels>
+    <novels>
+      <id>2</id>
+      <capQtd>11</capQtd>
+      <title>Título 2</title>
+      <sinopse>Sinopse 2</sinopse>
+      <release>2020</release>
+      <editor>Editora</editor>
+      <author>Autor</author>
+      <illustrator>Ilustrador</illustrator>
+      <finalized>false</finalized>
+    </novels>
+  </novels>
+</LightNovelList>

@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import Model.LightNovelList;
 
@@ -20,4 +21,21 @@ public class Deserialization {
 
     return novels;
   }
+
+  public static LightNovelList readXml(String pathname) throws StreamReadException, DatabindException, IOException {
+    File file = new File(pathname + ".xml");
+    XmlMapper xmlMapper = new XmlMapper();
+    LightNovelList novels = xmlMapper.readValue(file, LightNovelList.class);
+    
+    return novels;
+  }
+
+  // public static LightNovelList readCsv(String pathname) throws Exception {
+  //   try {
+      
+  //   }
+  //   catch (IOException e) {
+  //     e.printStackTrace();
+  //   }
+  // }
 }

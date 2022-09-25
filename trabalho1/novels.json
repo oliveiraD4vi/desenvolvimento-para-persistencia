@@ -3,8 +3,19 @@
     {
       "id": 1,
       "capQtd": 10,
-      "title": "Título",
-      "sinopse": "Sinopse",
+      "title": "Título 1",
+      "sinopse": "Sinopse 1",
+      "release": "2020",
+      "editor": "Editora",
+      "author": "Autor",
+      "illustrator": "Ilustrador",
+      "finalized": false
+    },
+    {
+      "id": 2,
+      "capQtd": 11,
+      "title": "Título 2",
+      "sinopse": "Sinopse 2",
       "release": "2020",
       "editor": "Editora",
       "author": "Autor",

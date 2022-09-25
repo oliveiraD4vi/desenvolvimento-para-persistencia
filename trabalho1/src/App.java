@@ -18,8 +18,11 @@ public class App {
       System.out.println("0. Encerrar");
       System.out.println("1. Adicionar novel na lista");
       System.out.println("2. Visualizar lista");
-      if (serialObject.getNovelList().size() > 0)
-        System.out.println("3. Salvar arquivo");
+      if (serialObject.getNovelList().size() > 0) {
+        System.out.println("3. Salvar arquivo em JSON");
+        System.out.println("4. Salvar arquivo em XML");
+        System.out.println("5. Salvar arquivo em CSV");
+      }
 
       System.out.print("Escolha uma opção: ");
       input = Integer.parseInt(in.nextLine());
@@ -35,9 +38,9 @@ public class App {
           String release = in.nextLine();
           System.out.print("Editora: ");
           String editor = in.nextLine();
-          System.out.print("Autor: ");
+          System.out.print("Autor(a): ");
           String author = in.nextLine();
-          System.out.print("Ilustrador: ");
+          System.out.print("Ilustrador(a): ");
           String illustrator = in.nextLine();
           System.out.print("Quantidade de capítulos: ");
           int capQtd = Integer.parseInt(in.nextLine());
@@ -63,7 +66,30 @@ public class App {
           break;
 
         case 3:
-          if (serialObject.saveJson(serialObject.getNovelList(), "novels")) {
+          System.out.print("\nInserir pathname: ");
+          String pathname3 = in.nextLine();
+
+          if (serialObject.saveJson(serialObject.getNovelList(), pathname3)) {
+            System.out.println();
+            System.out.println("Arquivo salvo com sucesso!");
+          }
+          break;
+          
+        case 4:
+          System.out.print("\nInserir pathname: ");
+          String pathname4 = in.nextLine();
+
+          if (serialObject.saveXml(serialObject.getNovelList(), pathname4)) {
+            System.out.println();
+            System.out.println("Arquivo salvo com sucesso!");
+          }
+          break;
+
+        case 5:
+          System.out.print("\nInserir pathname: ");
+          String pathname5 = in.nextLine();
+
+          if (serialObject.saveCsv(serialObject.getNovelList(), pathname5)) {
             System.out.println();
             System.out.println("Arquivo salvo com sucesso!");
           }
