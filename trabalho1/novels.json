@@ -1,0 +1,15 @@
+{
+  "novels": [
+    {
+      "id": 1,
+      "capQtd": 10,
+      "title": "Título",
+      "sinopse": "Sinopse",
+      "release": "2020",
+      "editor": "Editora",
+      "author": "Autor",
+      "illustrator": "Ilustrador",
+      "finalized": false
+    }
+  ]
+}
