@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
-import model.LightNovel;
-import serialization.Serialization;
+import Model.LightNovel;
+import Serialization.Serialization;
 
 public class App {
   public static void main(String[] args) throws Exception {
