@@ -34,7 +34,7 @@ public class Question3 {
       XmlMapper xm = new XmlMapper();
 
       xm.enable(SerializationFeature.INDENT_OUTPUT);
-      xm.writeValue(file, novels.getNovels());
+      xm.writeValue(file, novels);
     } catch (Exception e) {
       e.printStackTrace();
     }
