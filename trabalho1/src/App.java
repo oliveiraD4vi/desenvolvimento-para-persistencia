@@ -40,7 +40,7 @@ public class App {
       input = Integer.parseInt(in.nextLine());
       
       switch (input) {
-        case 1: insertNovel(counter, in, serialObject); break;
+        case 1: counter = insertNovel(counter, in, serialObject); break;
         case 2: viewList(serialObject); break;
         case 3: saveFile(serialObject, in, "JSON"); break;
         case 4: saveFile(serialObject, in, "XML"); break;
@@ -62,7 +62,7 @@ public class App {
     in.close();
   }
 
-  public static void insertNovel(int count, Scanner in, Serialization serialObject) throws IOException {
+  public static int insertNovel(int count, Scanner in, Serialization serialObject) throws IOException {
     System.out.println("\nAtributos da novel");
     System.out.print("Título: ");
     String title = in.nextLine();
@@ -87,6 +87,8 @@ public class App {
 
     count++;
     serialObject.addNovel(novel);
+
+    return count;
   }
 
   public static void viewList(Serialization serialObject) {
