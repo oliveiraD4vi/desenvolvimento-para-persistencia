@@ -1,4 +1,4 @@
-package Questions.Question1;
+package Questions.Question2;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -6,7 +6,7 @@ import java.util.Scanner;
 import Model.LightNovel;
 import Serialization.Serialization;
 
-public class Question1 {
+public class Question2 {
   public static void main(String[] args) throws IOException {
     int count = 1;
     Serialization serialObject = new Serialization();
