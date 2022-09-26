@@ -29,13 +29,4 @@ public class Deserialization {
     
     return novels;
   }
-
-  // public LightNovelList readCsv(String pathname) throws Exception {
-  //   try {
-      
-  //   }
-  //   catch (IOException e) {
-  //     e.printStackTrace();
-  //   }
-  // }
 }

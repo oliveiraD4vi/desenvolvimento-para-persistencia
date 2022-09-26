@@ -1,0 +1,26 @@
+{
+  "novels": [
+    {
+      "id": 1,
+      "capQtd": 10,
+      "title": "Título 1",
+      "sinopse": "Sinopse",
+      "release": "2020",
+      "editor": "Editora",
+      "author": "Autora",
+      "illustrator": "Ilustradora",
+      "finalized": false
+    },
+    {
+      "id": 1,
+      "capQtd": 11,
+      "title": "Título 2",
+      "sinopse": "Sinopse",
+      "release": "2020",
+      "editor": "Editora",
+      "author": "Autor",
+      "illustrator": "Ilustrador",
+      "finalized": true
+    }
+  ]
+}

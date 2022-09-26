@@ -1,41 +1,65 @@
 package Questions.Question3;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.opencsv.CSVWriter;
+
+import Model.LightNovel;
+import Model.LightNovelList;
 
 public class Question3 {
-  public static void main(String[] args) throws IOException {
-    String arqentry = args[0];
-    String arqoutput = args[1];
+  public static void main(String[] args) throws StreamReadException, DatabindException, IOException {
+    String inputPath = args[0];
+    String outputPath = args[1];
 
-    int cont;
-    byte[] data = new byte[4096];
+    File file = new File(inputPath);
+    ObjectMapper jsonFile = new ObjectMapper();
+    LightNovelList novels = jsonFile.readValue(file, LightNovelList.class);
+    
+    try {
+      file = new File(outputPath + ".xml");
+      XmlMapper xm = new XmlMapper();
+
+      xm.enable(SerializationFeature.INDENT_OUTPUT);
+      xm.writeValue(file, novels.getNovels());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     try {
-      File file = new File(arqentry);
-      ZipEntry entry = new ZipEntry(file.getName());
-      FileInputStream inputStream = new FileInputStream(file);
+      file = new File(outputPath + ".csv");
 
-      FileOutputStream destiny = new FileOutputStream(new File(arqoutput));
-      BufferedInputStream origin = new BufferedInputStream(inputStream, 4096);
-      ZipOutputStream output = new ZipOutputStream(new BufferedOutputStream(destiny));
+      FileWriter outputfile = new FileWriter(file);
+      CSVWriter writer = new CSVWriter(outputfile);
 
-      output.putNextEntry(entry);
+      String[] header = { "Id", "Caps", "Title", "Sinopse", "Lançamento", "Editora", "Autor", "Ilustrador", "Finalizado" };
+      writer.writeNext(header);
 
-      while((cont = origin.read(data, 0, 4096)) != -1) {
-        output.write(data, 0, cont);
+      for (LightNovel item : novels.getNovels()) {
+        String[] data = {
+          String.valueOf(item.getId()),
+          String.valueOf(item.getCapQtd()),
+          item.getTitle(),
+          item.getSinopse(),
+          item.getRelease(),
+          item.getEditor(),
+          item.getAuthor(),
+          item.getIllustrator(),
+          String.valueOf(item.getFinalized()),
+        };
+        writer.writeNext(data);
       }
 
-      origin.close();
-      output.close();
-    } catch(IOException e) {
-      throw new IOException(e.getMessage());
+      writer.close();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }

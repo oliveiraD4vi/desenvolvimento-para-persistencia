@@ -2,9 +2,14 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+
 import Compressing.Compressing;
+import Deserialization.Deserialization;
 import Hashing.Hashing;
 import Model.LightNovel;
+import Model.LightNovelList;
 import Serialization.Serialization;
 
 public class App {
@@ -29,6 +34,7 @@ public class App {
       }
       System.out.println("6. Comprimir arquivo em Zip");
       System.out.println("7. Verificar hashcode");
+      System.out.println("8. Converter JSON em XML e CSV");
 
       System.out.print("Escolha uma opção: ");
       input = Integer.parseInt(in.nextLine());
@@ -41,6 +47,7 @@ public class App {
         case 5: saveFile(serialObject, in, "CSV"); break;
         case 6: compress(in); break;
         case 7: hash(in); break;
+        case 8: convert(in); break;
         case 0: break;
 
         default:
@@ -146,5 +153,23 @@ public class App {
 
     Hashing hashing = new Hashing();
     System.out.println("\nSHA1: " + hashing.getHashSHA1(fileToHash));
+  }
+
+  public static void convert(Scanner in) throws StreamReadException, DatabindException, IOException {
+    Deserialization deserialization = new Deserialization();
+    Serialization serialization = new Serialization();
+
+    System.out.println();
+    System.out.print("Inserir filepath do arquivo: ");
+    String pathname = in.nextLine();
+
+    LightNovelList list = deserialization.readJson(pathname);
+
+    System.out.print("Inserir filepath dos arquivos de destino: ");
+    pathname = in.nextLine();
+    
+    if (serialization.saveCsv(list.getNovels(), pathname) && serialization.saveXml(list.getNovels(), pathname)) {
+      System.out.println("Arquivo convertido com sucesso!");
+    }
   }
 }
