@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 import Compressing.Compressing;
@@ -32,110 +34,14 @@ public class App {
       input = Integer.parseInt(in.nextLine());
       
       switch (input) {
-        case 1:
-          System.out.println("\nAtributos da novel");
-          System.out.print("Título: ");
-          String title = in.nextLine();
-          System.out.print("Sinopse: ");
-          String sinopse = in.nextLine();
-          System.out.print("Ano de lançamento: ");
-          String release = in.nextLine();
-          System.out.print("Editora: ");
-          String editor = in.nextLine();
-          System.out.print("Autor(a): ");
-          String author = in.nextLine();
-          System.out.print("Ilustrador(a): ");
-          String illustrator = in.nextLine();
-          System.out.print("Quantidade de capítulos: ");
-          int capQtd = Integer.parseInt(in.nextLine());
-          System.out.print("Finalizado (false para EM PRODUÇÃO e true para FINALIZADO): ");
-          Boolean finalized = Boolean.parseBoolean(in.nextLine());
-
-          LightNovel novel = new LightNovel(
-            counter, capQtd, title, sinopse, release, editor, author, illustrator, finalized
-          );
-
-          counter++;
-          serialObject.addNovel(novel);
-          break;
-
-        case 2:
-          if (serialObject.getNovelList().size() > 0) {
-            System.out.println();
-            System.out.println(serialObject.getNovelList().toString());
-          } else {
-            System.out.println();
-            System.out.println("Não há elementos na lista!");
-          }
-          break;
-
-        case 3:
-          if (serialObject.getNovelList().size() > 0) {
-            System.out.print("\nInserir pathname: ");
-            String pathname3 = in.nextLine();
-
-            if (serialObject.saveJson(serialObject.getNovelList(), pathname3)) {
-              System.out.println();
-              System.out.println("Arquivo salvo com sucesso!");
-            }
-          } else {
-            System.out.println();
-            System.out.println("Não há elementos na lista!");
-          }
-          break;
-          
-        case 4:
-          if (serialObject.getNovelList().size() > 0) {
-            System.out.print("\nInserir pathname: ");
-            String pathname4 = in.nextLine();
-
-            if (serialObject.saveXml(serialObject.getNovelList(), pathname4)) {
-              System.out.println();
-              System.out.println("Arquivo salvo com sucesso!");
-            }
-          } else {
-            System.out.println();
-            System.out.println("Não há elementos na lista!");
-          }
-          break;
-
-        case 5:
-          if (serialObject.getNovelList().size() > 0) {
-            System.out.print("\nInserir pathname: ");
-            String pathname5 = in.nextLine();
-
-            if (serialObject.saveCsv(serialObject.getNovelList(), pathname5)) {
-              System.out.println();
-              System.out.println("Arquivo salvo com sucesso!");
-            }
-          } else {
-            System.out.println();
-            System.out.println("Não há elementos na lista!");
-          }
-          break;
-        
-        case 6:
-          System.out.println();
-          System.out.print("Inserir filepath do arquivo: ");
-          String fileToCompress = in.nextLine();
-          System.out.print("Inserir filepath do destino: ");
-          String destinyFile = in.nextLine();
-
-          Compressing compressing = new Compressing();
-          compressing.compressToZip(destinyFile + ".zip", fileToCompress);
-          break;
-
-        case 7:
-          System.out.println();
-          System.out.print("Inserir filepath do arquivo: ");
-          String fileToHash = in.nextLine();
-
-          Hashing hashing = new Hashing();
-          System.out.println("\nSHA1: " + hashing.getHashSHA1(fileToHash));
-          break;
-
-        case 0:
-          break;
+        case 1: insertNovel(counter, in, serialObject); break;
+        case 2: viewList(serialObject); break;
+        case 3: saveFile(serialObject, in, "JSON"); break;
+        case 4: saveFile(serialObject, in, "XML"); break;
+        case 5: saveFile(serialObject, in, "CSV"); break;
+        case 6: compress(in); break;
+        case 7: hash(in); break;
+        case 0: break;
 
         default:
           System.out.println();
@@ -147,5 +53,98 @@ public class App {
     System.out.println();
     System.out.println("Encerrando...");
     in.close();
+  }
+
+  public static void insertNovel(int count, Scanner in, Serialization serialObject) throws IOException {
+    System.out.println("\nAtributos da novel");
+    System.out.print("Título: ");
+    String title = in.nextLine();
+    System.out.print("Sinopse: ");
+    String sinopse = in.nextLine();
+    System.out.print("Ano de lançamento: ");
+    String release = in.nextLine();
+    System.out.print("Editora: ");
+    String editor = in.nextLine();
+    System.out.print("Autor(a): ");
+    String author = in.nextLine();
+    System.out.print("Ilustrador(a): ");
+    String illustrator = in.nextLine();
+    System.out.print("Quantidade de capítulos: ");
+    int capQtd = Integer.parseInt(in.nextLine());
+    System.out.print("Finalizado (false para EM PRODUÇÃO e true para FINALIZADO): ");
+    Boolean finalized = Boolean.parseBoolean(in.nextLine());
+
+    LightNovel novel = new LightNovel(
+      count, capQtd, title, sinopse, release, editor, author, illustrator, finalized
+    );
+
+    count++;
+    serialObject.addNovel(novel);
+  }
+
+  public static void viewList(Serialization serialObject) {
+    if (serialObject.getNovelList().size() > 0) {
+      System.out.println();
+      System.out.println(serialObject.getNovelList().toString());
+    } else {
+      System.out.println();
+      System.out.println("Não há elementos na lista!");
+    }
+  }
+
+  public static void saveFile(Serialization serialObject, Scanner in, String method) throws IOException {
+    if (serialObject.getNovelList().size() > 0) {
+      System.out.print("\nInserir pathname: ");
+      String pathname = in.nextLine();
+
+      switch (method) {
+        case "JSON":
+          if (serialObject.saveJson(serialObject.getNovelList(), pathname)) {
+            System.out.println();
+            System.out.println("Arquivo salvo com sucesso!");
+          }
+          break;
+
+        case "XML":
+          if (serialObject.saveXml(serialObject.getNovelList(), pathname)) {
+            System.out.println();
+            System.out.println("Arquivo salvo com sucesso!");
+          }
+          break;
+
+        case "CSV":
+          if (serialObject.saveCsv(serialObject.getNovelList(), pathname)) {
+            System.out.println();
+            System.out.println("Arquivo salvo com sucesso!");
+          }
+          break;
+      
+        default:
+          break;
+      }
+    } else {
+      System.out.println();
+      System.out.println("Não há elementos na lista!");
+    }
+  }
+
+  public static void compress(Scanner in) throws IOException {
+    System.out.println();
+    System.out.print("Inserir filepath do arquivo: ");
+    String fileToCompress = in.nextLine();
+    System.out.print("Inserir filepath do destino: ");
+    String destinyFile = in.nextLine();
+
+    Compressing compressing = new Compressing();
+    compressing.compressToZip(destinyFile + ".zip", fileToCompress);
+  }
+
+  public static void hash(Scanner in) throws NoSuchAlgorithmException, IOException {
+    System.out.println();
+    System.out.print("Inserir filepath do arquivo: ");
+    String fileToHash = in.nextLine();
+
+    Hashing hashing = new Hashing();
+    System.out.println("\nSHA1: " + hashing.getHashSHA1(fileToHash));
   }
 }
