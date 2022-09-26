@@ -1,3 +1,9 @@
+/*
+ * Crie uma classe Java que recebe via linha de comando
+ * o nome de um arquivo qualquer e exibe no console o hash
+ * SHA1 desse arquivo.
+ */
+
 package Questions.Question5;
 
 import java.io.IOException;

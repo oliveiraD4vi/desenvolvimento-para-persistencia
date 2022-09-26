@@ -1,3 +1,9 @@
+/*
+ * Crie uma classe Java que recebe como entrada de
+ * teclado o nome de um arquivo qualquer e o compacta para
+ * o formato ZIP.
+ */
+
 package Questions.Question4;
 
 import java.io.BufferedInputStream;
