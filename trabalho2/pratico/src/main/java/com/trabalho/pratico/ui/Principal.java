@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -51,33 +50,18 @@ public class Principal implements CommandLineRunner {
   }
 
   public void insertActorInMovie(Actor actor, Movie movie) {
-    List<Actor> listing = new ArrayList<Actor>();
+    List<Actor> listing = movieRepository.findAllActors(movie.getId());
 
-    if (movie.getActors() != null)
-      for (Actor a : movie.getActors())
-        listing.add(a);
-
-    actorRepository.save(actor);
-    
     listing.add(actor);
     movie.setActors(listing);
-
-    movieRepository.save(movie);
-  }
-
-  public void insertMovieInActor(Movie movie, Actor actor) {
-    List<Movie> listing = new ArrayList<Movie>();
-
-    if (actor.getMovies() != null)
-      for (Movie m : actor.getMovies())
-        listing.add(m);
-
-    movieRepository.save(movie);
     
-    listing.add(movie);
-    actor.setMovies(listing);
-
-    actorRepository.save(actor);
+    if (movie.getId() != null) {
+      actorRepository.save(actor);
+      movieRepository.save(movie);
+    } else if (actor.getId() != null) {
+      movieRepository.save(movie);
+      actorRepository.save(actor);
+    }
   }
 
   public StringBuilder listMovies(List<Movie> movies) {
@@ -106,18 +90,18 @@ public class Principal implements CommandLineRunner {
     Actor actor;
 
     do {
-      in = JOptionPane.showInputDialog("Choose an option:\n1 - View all movies\n2 - View an movie\n3 - View all actors\n4 - View an actor\n0 - Close").charAt(0);
+      in = JOptionPane.showInputDialog("Choose an option:\n1 - View all movies\n2 - View an movie\n3 - View all actors\n4 - View an actor\n0 - Close menu").charAt(0);
       StringBuilder listing;
       switch (in) {
         case '1':
           listing = listMovies(movieRepository.findAll());
-          JOptionPane.showMessageDialog(null, listing.length() == 0 ? "Empty list" : listing);
+          JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "Empty list" : listing);
           break;
         case '2':
           Integer movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the movie: "));
           movie = movieRepository.findFirstById(movieId);
           if (movie != null) {
-            JOptionPane.showMessageDialog(null, movie + "\n" + listActors(movie.getActors()));
+            JOptionPane.showMessageDialog(null, movie + "\nActors:\n" + listActors(movieRepository.findAllActors(movieId)));
           }
           else {
             JOptionPane.showMessageDialog(null, "Error: Movie not found");
@@ -125,13 +109,13 @@ public class Principal implements CommandLineRunner {
           break;
         case '3':
           listing = listActors(actorRepository.findAll());
-          JOptionPane.showMessageDialog(null, listing.length() == 0 ? "Empty list" : listing);
+          JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "Empty list" : listing);
           break;
         case '4':
           Integer actorId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the actor: "));
           actor = actorRepository.findFirstById(actorId);
           if (actor != null) {
-            JOptionPane.showMessageDialog(null, actor + "\n" + listMovies(actor.getMovies()));
+            JOptionPane.showMessageDialog(null, actor + "\nMovies:\n" + listMovies(actorRepository.findAllMovies(actorId)));
           }
           else {
             JOptionPane.showMessageDialog(null, "Error: Actor not found");
@@ -153,7 +137,7 @@ public class Principal implements CommandLineRunner {
     Actor actor;
 
     do {
-      in = JOptionPane.showInputDialog("Choose an option:\n1 - Update movie\n2 - Update actor\n0 - Close").charAt(0);
+      in = JOptionPane.showInputDialog("Choose an option:\n1 - Update movie\n2 - Update actor\n0 - Close menu").charAt(0);
       switch (in) {
         case '1':
           Integer movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the movie: "));
@@ -195,7 +179,7 @@ public class Principal implements CommandLineRunner {
     Actor actor;
 
     do {
-      in = JOptionPane.showInputDialog("Choose an option:\n1 - Delete an movie\n2 - Delete an actor\n0 - Close").charAt(0);
+      in = JOptionPane.showInputDialog("Choose an option:\n1 - Delete an movie\n2 - Delete an actor\n0 - Close menu").charAt(0);
       switch (in) {
         case '1':
           Integer movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the movie: "));
@@ -228,7 +212,7 @@ public class Principal implements CommandLineRunner {
     int in;
 
     do {
-      in = JOptionPane.showInputDialog("Choose an option:\n1 - Insert an movie\n2 - Insert an actor\n0 - Close").charAt(0);
+      in = JOptionPane.showInputDialog("Choose an option:\n1 - Insert an movie\n2 - Insert an actor\n0 - Close menu").charAt(0);
       switch (in) {
         case '1':
           movie = new Movie();
@@ -267,14 +251,14 @@ public class Principal implements CommandLineRunner {
               Integer movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert movie ID:"));
               movie = movieRepository.findFirstById(movieId);
               if (movie != null) {
-                insertMovieInActor(movie, actor);
+                insertActorInMovie(actor, movie);
               } else {
                 JOptionPane.showMessageDialog(null, "Error: Movie not found");
               }
             } else {
               movie = new Movie();
               getMovieInfo(movie);
-              insertMovieInActor(movie, actor);
+              insertActorInMovie(actor, movie);
             }
             chose = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
           } while (chose != 1 && chose != 2);
@@ -290,10 +274,9 @@ public class Principal implements CommandLineRunner {
     } while(in != '0');
   }
 
-  @Override
-  public void run(String... args) throws Exception {
+  public void exerciseMenu() throws ParseException {
     String menu =
-      "What do you want to do?\n1 - Insert\n2 - Update\n3 - Delete\n4 - View\n5 - Find movie by year\n6 - Search movie for string\n7 - Find actors by year of birth\n8 - Count movies\n9 - Get actors of movie\n10 - Get movies of actor\n0 - Close";
+      "Choose an option:\n1 - Find movie by year\n2 - Search movie for string\n3 - Find actors by year of birth\n4 - Count movies\n5 - Get actors of movie\n6 - Get movies of actor\n0 - Close submenu";
     char option;
     List<String> movies;
     List<String> actors;
@@ -302,27 +285,23 @@ public class Principal implements CommandLineRunner {
     do {
       option = JOptionPane.showInputDialog(menu).charAt(0);
       switch (option) {
-        case '1': insertMenu(); break;
-        case '2': updateMenu(); break;
-        case '3': deleteMenu(); break;
-        case '4': viewMenu(); break;
-        case '5':
+        case '1':
           int year = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert release year:"));
           movies = movieRepository.findAllByYear(year);
           listing = new StringBuilder();
           for (String movie : movies)
             listing.append(movie).append('\n');
-          JOptionPane.showMessageDialog(null, listing.length() == 0 ? "Nenhum filme encontrado!" : listing);
+          JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "No movie found!" : listing);
           break;
-        case '6':
+        case '2':
           String str = JOptionPane.showInputDialog(null, "Insert the string to search for:");
           movies = movieRepository.findAllByString(str);
           listing = new StringBuilder();
           for (String movie : movies)
             listing.append(movie).append('\n');
-          JOptionPane.showMessageDialog(null, listing.length() == 0 ? "Nenhum filme encontrado!" : listing);
+          JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "No movie found!" : listing);
           break;
-        case '7':
+        case '3':
           String birth = JOptionPane.showInputDialog(null, "Insert the year of birth to search for:");
           if (birth.length() == 4) {
 
@@ -333,22 +312,54 @@ public class Principal implements CommandLineRunner {
             listing = new StringBuilder();
             for (String actor : actors)
               listing.append(actor).append('\n');
-            JOptionPane.showMessageDialog(null, listing.length() == 0 ? "Nenhum ator encontrado!" : listing);
+            JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "No actor found!" : listing);
           } else {
-            JOptionPane.showMessageDialog(null, "Nenhum ator encontrado!");
+            JOptionPane.showMessageDialog(null, "No actor found!");
           }
           break;
-        case '8':
+        case '4':
           JOptionPane.showMessageDialog(null, "At this moment, we have " + movieRepository.countMovies() + " movies registered!");
           break;
-        case '9':
-          Integer id = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert movie ID:"));
-          actors = movieRepository.findAllActors(id);
+        case '5':
+          Integer mId = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert movie ID:"));
+          List<Actor> actorsList = movieRepository.findAllActors(mId);
           listing = new StringBuilder();
-          for (String actor : actors)
-            listing.append(actor).append('\n');
-          JOptionPane.showMessageDialog(null, listing.length() == 0 ? "Nenhum ator encontrado!" : listing);
+          for (Actor actor : actorsList)
+            if (actor != null) listing.append(actor.getName()).append('\n');
+          JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "No actor found!" : listing);
           break;
+        case '6':
+          Integer aId = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert actor ID:"));
+          List<Movie> moviesList = actorRepository.findAllMovies(aId);
+          listing = new StringBuilder();
+          for (Movie movie : moviesList)
+            if (movie != null) listing.append(movie.getTitle()).append('\n');
+          JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "No movie found!" : listing);
+          break;
+        case '0':
+          JOptionPane.showMessageDialog(null, "This menu will close...");
+          break;
+        default:
+          JOptionPane.showMessageDialog(null, "Invalid option! Try again");
+          break;
+      }
+    } while (option != '0');
+  }
+
+  @Override
+  public void run(String... args) throws Exception {
+    String menu =
+      "What do you want to do?\n1 - Insert\n2 - Update\n3 - Delete\n4 - View\n5 - Exercise\n0 - Close";
+    char option;
+
+    do {
+      option = JOptionPane.showInputDialog(menu).charAt(0);
+      switch (option) {
+        case '1': insertMenu(); break;
+        case '2': updateMenu(); break;
+        case '3': deleteMenu(); break;
+        case '4': viewMenu(); break;
+        case '5': exerciseMenu(); break;
         case '0':
           JOptionPane.showMessageDialog(null, "This app will close now...");
           break;

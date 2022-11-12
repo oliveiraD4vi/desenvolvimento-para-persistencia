@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.trabalho.pratico.entity.Actor;
 import com.trabalho.pratico.entity.Movie;
 
 @Repository
@@ -22,6 +23,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
   @Query("select COUNT(*) from Movie")
   public int countMovies();
 
-  @Query("select ma.name from Movie m left outer join m.actors ma where m.id = :id")
-  public List<String> findAllActors(Integer id);
+  @Query("select ma from Movie m left outer join m.actors ma where m.id = :id")
+  public List<Actor> findAllActors(Integer id);
 }
