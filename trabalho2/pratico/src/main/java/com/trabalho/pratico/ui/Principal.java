@@ -310,7 +310,7 @@ public class Principal implements CommandLineRunner {
 
   public void exerciseMenu() throws ParseException {
     String menu =
-      "Choose an option:\n1 - Find movie by year\n2 - Search movie for string\n3 - Find actors by year of birth\n4 - Count movies\n5 - Get actors of movie\n6 - Get movies of actor\n0 - Close submenu";
+      "Choose an option:\n1 - Find movie by year\n2 - Search movie for string\n3 - Find actors by year of birth\n4 - Count movies\n5 - Get actors of movie\n6 - Get movies of actor\n7 - View Menu\n0 - Close";
     char option;
     List<String> movies;
     List<String> actors;
@@ -370,6 +370,9 @@ public class Principal implements CommandLineRunner {
             if (movie != null) listing.append(movie.getTitle()).append('\n');
           JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "No movie found!" : listing);
           break;
+        case '7':
+          viewMenu();
+          break;
         case '0':
           JOptionPane.showMessageDialog(null, "This menu will close...");
           break;
@@ -382,26 +385,27 @@ public class Principal implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    String menu =
-      "What do you want to do?\n1 - Insert\n2 - Update\n3 - Delete\n4 - View\n5 - Exercise\n0 - Close";
-    char option;
+    // String menu = "What do you want to do?\n1 - Insert\n2 - Update\n3 - Delete\n4 - View\n5 - Exercise\n0 - Close";
+    // char option;
 
-    do {
-      option = JOptionPane.showInputDialog(menu).charAt(0);
-      switch (option) {
-        case '1': insertMenu(); break;
-        case '2': updateMenu(); break;
-        case '3': deleteMenu(); break;
-        case '4': viewMenu(); break;
-        case '5': exerciseMenu(); break;
-        case '0':
-          JOptionPane.showMessageDialog(null, "This app will close now...");
-          break;
-        default:
-          JOptionPane.showMessageDialog(null, "Invalid option! Try again");
-          break;
-      }
-    } while (option != '0');
+    // do {
+    //   option = JOptionPane.showInputDialog(menu).charAt(0);
+    //   switch (option) {
+    //     case '1': insertMenu(); break;
+    //     case '2': updateMenu(); break;
+    //     case '3': deleteMenu(); break;
+    //     case '4': viewMenu(); break;
+    //     case '5': exerciseMenu(); break;
+    //     case '0':
+    //       JOptionPane.showMessageDialog(null, "This app will close now...");
+    //       break;
+    //     default:
+    //       JOptionPane.showMessageDialog(null, "Invalid option! Try again");
+    //       break;
+    //   }
+    // } while (option != '0');
+
+    exerciseMenu();
   }
 
 }
