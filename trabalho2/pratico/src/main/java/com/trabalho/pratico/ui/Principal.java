@@ -6,6 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +35,8 @@ public class Principal implements CommandLineRunner {
   MovieRepository movieRepository;
   @Autowired
   ActorRepository actorRepository;
+  @PersistenceContext
+  private EntityManager em;
   
   public static void main(String[] args) {
     SpringApplicationBuilder builder = new SpringApplicationBuilder(Principal.class);
@@ -94,7 +102,7 @@ public class Principal implements CommandLineRunner {
       StringBuilder listing;
       switch (in) {
         case '1':
-          listing = listMovies(movieRepository.findAll());
+          listing = listMovies(findAllMovies());
           JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "Empty list" : listing);
           break;
         case '2':
@@ -108,7 +116,7 @@ public class Principal implements CommandLineRunner {
           }
           break;
         case '3':
-          listing = listActors(actorRepository.findAll());
+          listing = listActors(findAllActors());
           JOptionPane.showMessageDialog(null, listing.length() == 0 || listing == null ? "Empty list" : listing);
           break;
         case '4':
@@ -272,6 +280,32 @@ public class Principal implements CommandLineRunner {
           break;
       }
     } while(in != '0');
+  }
+
+  public List<Actor> findAllActors() {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+    CriteriaQuery<Actor> criteriaQuery = criteriaBuilder.createQuery(Actor.class);
+    Root<Actor> root = criteriaQuery.from(Actor.class);
+
+    criteriaQuery.select(root);
+
+    TypedQuery<Actor> typedQuery = em.createQuery(criteriaQuery);
+
+    return typedQuery.getResultList();
+  }
+
+  public List<Movie> findAllMovies() {
+    CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+    CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
+    Root<Movie> root = criteriaQuery.from(Movie.class);
+
+    criteriaQuery.select(root);
+
+    TypedQuery<Movie> typedQuery = em.createQuery(criteriaQuery);
+
+    return typedQuery.getResultList();
   }
 
   public void exerciseMenu() throws ParseException {
