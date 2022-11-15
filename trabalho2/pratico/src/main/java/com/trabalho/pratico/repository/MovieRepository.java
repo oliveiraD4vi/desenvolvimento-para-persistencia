@@ -23,6 +23,6 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
   @Query("select COUNT(*) from Movie")
   public int countMovies();
 
-  @Query("select ma from Movie m left outer join m.actors ma where m.id = :id")
+  @Query("select ma from Movie m inner join m.actors ma where m.id = :id")
   public List<Actor> findAllActors(Integer id);
 }

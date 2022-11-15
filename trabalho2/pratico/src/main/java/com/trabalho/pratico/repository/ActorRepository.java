@@ -18,6 +18,6 @@ public interface ActorRepository extends JpaRepository<Actor, Integer> {
   @Query("select a.name from Actor as a where a.bornAt between :yearInit and :yearFinish")
   public List<String> findAllByYear(Date yearInit, Date yearFinish);
 
-  @Query("select am from Actor a left outer join a.movies am where a.id = :id")
+  @Query("select am from Actor a inner join a.movies am where a.id = :id")
   public List<Movie> findAllMovies(Integer id);
 }
