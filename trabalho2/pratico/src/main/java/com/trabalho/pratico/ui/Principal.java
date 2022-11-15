@@ -66,7 +66,7 @@ public class Principal implements CommandLineRunner {
     if (movie.getId() != null) {
       actorRepository.save(actor);
       movieRepository.save(movie);
-    } else if (actor.getId() != null) {
+    } else {
       movieRepository.save(movie);
       actorRepository.save(actor);
     }
