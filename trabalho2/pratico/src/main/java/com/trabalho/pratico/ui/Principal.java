@@ -303,14 +303,21 @@ public class Principal implements CommandLineRunner {
         case '1':
           Integer movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the movie: "));
           movie = movieRepository.findFirstById(movieId);
-          if (movie != null) movieRepository.deleteById(movie.getId());
-          else JOptionPane.showMessageDialog(null, "Error: Movie not found");
+          if (movie != null) {
+            movie.setActors(null);
+            movieRepository.save(movie);
+            movieRepository.deleteById(movie.getId());
+          } else JOptionPane.showMessageDialog(null, "Error: Movie not found");
           break;
 
         case '2':
           Integer actorId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the actor: "));
           actor = actorRepository.findFirstById(actorId);
-          if (actor != null) actorRepository.deleteById(actor.getId());
+          if (actor != null) {
+            List<Movie> listing = actorRepository.findAllMovies(actorId);
+            for (Movie m : listing) deleteActorFromMovie(actor, m);
+            actorRepository.deleteById(actor.getId());
+          }
           else JOptionPane.showMessageDialog(null, "Error: Actor not found");
           break;
 
