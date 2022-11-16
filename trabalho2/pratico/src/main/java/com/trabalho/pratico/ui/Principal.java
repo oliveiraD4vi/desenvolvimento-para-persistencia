@@ -72,6 +72,20 @@ public class Principal implements CommandLineRunner {
     }
   }
 
+  public void deleteActorFromMovie(Actor actor, Movie movie) {
+    List<Actor> listing = movieRepository.findAllActors(movie.getId());
+
+    for (Actor a : listing) {
+      if (a.getId() == actor.getId()) {
+        listing.remove(a);
+        break;
+      }
+    }
+
+    movie.setActors(listing);
+    movieRepository.save(movie);
+  }
+
   public StringBuilder listMovies(List<Movie> movies) {
     StringBuilder listing = new StringBuilder();
 		
@@ -167,17 +181,54 @@ public class Principal implements CommandLineRunner {
 
   public void updateMenu() throws HeadlessException, ParseException {
     char in;
+    int choice;
     Movie movie;
     Actor actor;
+    Integer movieId;
+    Integer actorId;
 
     do {
       in = JOptionPane.showInputDialog("Choose an option:\n1 - Update movie\n2 - Update actor\n0 - Close").charAt(0);
       switch (in) {
         case '1':
-          Integer movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the movie: "));
+          movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the movie: "));
           movie = movieRepository.findFirstById(movieId);
           if (movie != null) {
             getMovieInfo(movie);
+
+            choice = JOptionPane.showConfirmDialog(null, "Will you insert any actors?");
+            while (choice != 1 && choice != 2) {
+              int input = JOptionPane.showConfirmDialog(null, "This actor already exists?");
+              if (input == 0) {
+                listActors(findAllActors());
+                actorId = Integer.parseInt(JOptionPane.showInputDialog("Insert actor ID:"));
+                actor = actorRepository.findFirstById(actorId);
+                if (actor != null) {
+                  insertActorInMovie(actor, movie);
+                } else {
+                  JOptionPane.showMessageDialog(null, "Error: Actor not found");
+                }
+              } else {
+                actor = new Actor();
+                getActorInfo(actor);
+                insertActorInMovie(actor, movie);
+              }
+              choice = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
+            }
+
+            choice = JOptionPane.showConfirmDialog(null, "Will you remove any actors?");
+            while (choice != 1 && choice != 2) {
+              listActors(findAllActors());
+              actorId = Integer.parseInt(JOptionPane.showInputDialog("Insert actor ID:"));
+              actor = actorRepository.findFirstById(actorId);
+              if (actor != null) {
+                deleteActorFromMovie(actor, movie);
+              } else {
+                JOptionPane.showMessageDialog(null, "Error: Actor not found");
+              }
+              choice = JOptionPane.showConfirmDialog(null, "Will you delete another one?");
+            }
+
             movieRepository.save(movie);
           }
           else {
@@ -186,10 +237,44 @@ public class Principal implements CommandLineRunner {
           break;
 
         case '2':
-          Integer actorId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the actor: "));
+          actorId = Integer.parseInt(JOptionPane.showInputDialog("Insert ID of the actor: "));
           actor = actorRepository.findFirstById(actorId);
           if (actor != null) {
             getActorInfo(actor);
+
+            choice = JOptionPane.showConfirmDialog(null, "Will you insert any movies?");
+            while (choice != 1 && choice != 2) {
+              int input = JOptionPane.showConfirmDialog(null, "This movies already exists?");
+              if (input == 0) {
+                listMovies(findAllMovies());
+                movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert movie ID:"));
+                movie = movieRepository.findFirstById(movieId);
+                if (movie != null) {
+                  insertActorInMovie(actor, movie);
+                } else {
+                  JOptionPane.showMessageDialog(null, "Error: Movie not found");
+                }
+              } else {
+                movie = new Movie();
+                getMovieInfo(movie);
+                insertActorInMovie(actor, movie);
+              }
+              choice = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
+            }
+
+            choice = JOptionPane.showConfirmDialog(null, "Will you remove any movies?");
+            while (choice != 1 && choice != 2) {
+              listMovies(findAllMovies());
+              movieId = Integer.parseInt(JOptionPane.showInputDialog("Insert movie ID:"));
+              movie = movieRepository.findFirstById(movieId);
+              if (movie != null) {
+                deleteActorFromMovie(actor, movie);
+              } else {
+                JOptionPane.showMessageDialog(null, "Error: Movie not found");
+              }
+              choice = JOptionPane.showConfirmDialog(null, "Will you delete another one?");
+            }
+
             actorRepository.save(actor);
           }
           else {
@@ -242,7 +327,7 @@ public class Principal implements CommandLineRunner {
   public void insertMenu() throws HeadlessException, ParseException {
     Movie movie;
     Actor actor;
-    int chose;
+    int choice;
     int in;
 
     do {
@@ -252,7 +337,7 @@ public class Principal implements CommandLineRunner {
           movie = new Movie();
           getMovieInfo(movie);
           movieRepository.save(movie);
-          chose = JOptionPane.showConfirmDialog(null, "Will you insert any actors?");
+          choice = JOptionPane.showConfirmDialog(null, "Will you insert any actors?");
           do {
             in = JOptionPane.showConfirmDialog(null, "This actor already exists?");
             if (in == 0) {
@@ -269,15 +354,15 @@ public class Principal implements CommandLineRunner {
               getActorInfo(actor);
               insertActorInMovie(actor, movie);
             }
-            chose = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
-          } while (chose != 1 && chose != 2);
+            choice = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
+          } while (choice != 1 && choice != 2);
           break;
 
         case '2':
           actor = new Actor();
           getActorInfo(actor);
           actorRepository.save(actor);
-          chose = JOptionPane.showConfirmDialog(null, "Will you insert any movies?");
+          choice = JOptionPane.showConfirmDialog(null, "Will you insert any movies?");
           do {
             in = JOptionPane.showConfirmDialog(null, "This movie already exists?");
             if (in == 0) {
@@ -294,8 +379,8 @@ public class Principal implements CommandLineRunner {
               getMovieInfo(movie);
               insertActorInMovie(actor, movie);
             }
-            chose = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
-          } while (chose != 1 && chose != 2);
+            choice = JOptionPane.showConfirmDialog(null, "Will you insert another one?");
+          } while (choice != 1 && choice != 2);
           break;
 
         case '0':
