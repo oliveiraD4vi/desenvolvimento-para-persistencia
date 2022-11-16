@@ -1,8 +1,10 @@
 package com.trabalho.pratico.ui;
 
 import java.awt.HeadlessException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,8 +46,12 @@ public class Principal implements CommandLineRunner {
   }
 
   public static void getActorInfo(Actor actor) throws HeadlessException, ParseException {
+    Date date = Calendar.getInstance().getTime();
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    String born_at = dateFormat.format(actor.getBornAt() != null ? actor.getBornAt() : date);  
+
     String name = JOptionPane.showInputDialog("Insert actor name: ", actor.getName());
-    Date bornAt = new SimpleDateFormat("dd/MM/yyyy").parse(JOptionPane.showInputDialog("Insert date of birth (dd/MM/yyyy): ", actor.getBornAt()));
+    Date bornAt = new SimpleDateFormat("dd/MM/yyyy").parse(JOptionPane.showInputDialog("Insert date of birth (dd/MM/yyyy): ", born_at));
     actor.setName(name);
     actor.setBornAt(bornAt);
   }
